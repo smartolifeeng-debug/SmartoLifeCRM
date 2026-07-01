@@ -1,0 +1,27 @@
+# Build output
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Rider
+.idea/
+
+# Local database and runtime data
+*.db
+*.db-shm
+*.db-wal
+
+# Logs and generated files
+Logs/*.log
+Exports/*
+Reports/*
+Backup/*
+
+!Exports/README.md
+!Reports/README.md
+!Backup/README.md
+

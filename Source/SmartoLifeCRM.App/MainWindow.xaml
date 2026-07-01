@@ -1,0 +1,538 @@
+<Window x:Class="SmartoLifeCRM.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Smarto Life CRM"
+        Width="1440"
+        Height="900"
+        MinWidth="1180"
+        MinHeight="720"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+    <Grid Background="{StaticResource SmartoPageBackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="{StaticResource SmartoNavigationBrush}">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Width" Value="304" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSidebarExpanded}" Value="False">
+                            <Setter Property="Width" Value="88" />
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width"
+                                                         To="88"
+                                                         Duration="0:0:0.18" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width"
+                                                         To="304"
+                                                         Duration="0:0:0.18" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <DockPanel LastChildFill="True">
+                <Grid DockPanel.Dock="Top" Margin="14,16,14,18">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="46"
+                                Height="46"
+                                CornerRadius="12"
+                                Background="{StaticResource SmartoWhiteBrush}">
+                            <Grid>
+                                <Image Source="{Binding LogoImagePath}"
+                                       Stretch="Uniform"
+                                       Margin="7"
+                                       Visibility="{Binding LogoVisibility}" />
+                                <TextBlock Text="SL"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource SmartoOrangeBrush}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding PlaceholderLogoVisibility}" />
+                            </Grid>
+                        </Border>
+
+                        <StackPanel Margin="12,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding SidebarTextVisibility}">
+                            <TextBlock Text="{Binding CompanyName}"
+                                       Foreground="{StaticResource SmartoWhiteBrush}"
+                                       FontSize="20"
+                                       FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Slogan}"
+                                       Foreground="#BFFFFFFF"
+                                       FontSize="12" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Button Grid.Column="1"
+                            Style="{StaticResource IconButton}"
+                            Command="{Binding ToggleSidebarCommand}"
+                            Background="#22FFFFFF"
+                            BorderBrush="#22FFFFFF"
+                            Foreground="{StaticResource SmartoWhiteBrush}">
+                        <TextBlock Text="{Binding SidebarToggleGlyph}"
+                                   Style="{StaticResource IconText}" />
+                    </Button>
+                </Grid>
+
+                <Border DockPanel.Dock="Bottom"
+                        Margin="14"
+                        Padding="14"
+                        Background="#1FFFFFFF"
+                        CornerRadius="16"
+                        Visibility="{Binding SidebarFooterVisibility}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding PhaseLabel}"
+                                   Foreground="{StaticResource SmartoWhiteBrush}"
+                                   FontWeight="SemiBold" />
+                        <TextBlock Text="UI modernization only. No new business modules."
+                                   Foreground="#CCFFFFFF"
+                                   FontSize="12"
+                                   Margin="0,6,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding NavigationItems}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource NavigationButton}"
+                                        IsEnabled="{Binding IsEnabled}"
+                                        Command="{Binding DataContext.SelectNavigationCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="4" />
+                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Width="4"
+                                                CornerRadius="4"
+                                                Background="{StaticResource SmartoOrangeBrush}">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                        </Border>
+
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding IconGlyph}"
+                                                   Style="{StaticResource IconText}"
+                                                   Foreground="{StaticResource SmartoWhiteBrush}" />
+
+                                        <StackPanel Grid.Column="2"
+                                                    Visibility="{Binding DataContext.SidebarTextVisibility, RelativeSource={RelativeSource AncestorType=Window}}">
+                                            <TextBlock Text="{Binding Title}"
+                                                       Foreground="{StaticResource SmartoWhiteBrush}"
+                                                       FontWeight="SemiBold" />
+                                            <TextBlock Text="{Binding Description}"
+                                                       Foreground="#BFFFFFFF"
+                                                       FontSize="12" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    Background="{StaticResource SmartoSurfaceBrush}"
+                    BorderBrush="{StaticResource SmartoBorderBrush}"
+                    BorderThickness="0,0,0,1"
+                    Padding="24,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Smarto Life CRM"
+                                   FontSize="20"
+                                   FontWeight="SemiBold" />
+                        <Border Style="{StaticResource StatusBadge}"
+                                Margin="14,0,0,0"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="Local-first"
+                                       Foreground="{StaticResource SmartoOrangeDarkBrush}"
+                                       FontSize="12"
+                                       FontWeight="SemiBold" />
+                        </Border>
+                    </StackPanel>
+
+                    <Border Grid.Column="1"
+                            MaxWidth="620"
+                            Margin="30,0"
+                            HorizontalAlignment="Stretch"
+                            Background="{StaticResource SmartoSoftSurfaceBrush}"
+                            BorderBrush="{StaticResource SmartoBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="14"
+                            Padding="14,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="&#xE721;"
+                                       Style="{StaticResource IconText}"
+                                       Foreground="{StaticResource SmartoMutedTextBrush}"
+                                       Margin="0,0,10,0" />
+                            <TextBox Grid.Column="1"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     Text="Search contacts, products, quotations..."
+                                     Foreground="{StaticResource SmartoMutedTextBrush}" />
+                        </Grid>
+                    </Border>
+
+                    <StackPanel Grid.Column="2"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <Button Style="{StaticResource IconButton}"
+                                ToolTip="Notifications area placeholder"
+                                Margin="0,0,10,0">
+                            <TextBlock Text="&#xE7F4;" Style="{StaticResource IconText}" />
+                        </Button>
+                        <Button Style="{StaticResource IconButton}"
+                                ToolTip="Settings shortcut"
+                                Margin="0,0,14,0">
+                            <TextBlock Text="&#xE713;" Style="{StaticResource IconText}" />
+                        </Button>
+                        <Border Background="{StaticResource SmartoSoftSurfaceBrush}"
+                                BorderBrush="{StaticResource SmartoBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="16"
+                                Padding="12,8">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="34"
+                                        Height="34"
+                                        Background="{StaticResource SmartoOrangeBrush}"
+                                        CornerRadius="17"
+                                        Margin="0,0,10,0">
+                                    <TextBlock Text="A"
+                                               Foreground="{StaticResource SmartoWhiteBrush}"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Border>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding UserDisplayName}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding UserRoleLabel}"
+                                               Style="{StaticResource MutedText}"
+                                               FontSize="11" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Row="1"
+                          VerticalScrollBarVisibility="Auto"
+                          Padding="26">
+                <StackPanel>
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <TextBlock Text="Executive Dashboard" Style="{StaticResource PageTitleText}" />
+                            <TextBlock Text="Commercial UI shell for Smarto Life CRM. Business logic remains unchanged."
+                                       Style="{StaticResource MutedText}"
+                                       Margin="0,6,0,0" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <Button Content="Quick Add"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Margin="0,0,10,0" />
+                            <Button Content="Customize"
+                                    Style="{StaticResource SecondaryButton}" />
+                        </StackPanel>
+                    </Grid>
+
+                    <ItemsControl ItemsSource="{Binding Metrics}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource CardCompact}"
+                                        Width="248"
+                                        MinHeight="146">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Title}" Style="{StaticResource MutedText}" />
+                                            <Border Grid.Column="1"
+                                                    Width="38"
+                                                    Height="38"
+                                                    CornerRadius="12"
+                                                    Background="{StaticResource SmartoOrangeLightBrush}">
+                                                <TextBlock Text="{Binding IconGlyph}"
+                                                           Style="{StaticResource IconText}"
+                                                           Foreground="{StaticResource SmartoOrangeBrush}" />
+                                            </Border>
+                                        </Grid>
+                                        <TextBlock Grid.Row="1"
+                                                   Text="{Binding Value}"
+                                                   FontSize="36"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource SmartoHeadingTextBrush}"
+                                                   VerticalAlignment="Center" />
+                                        <TextBlock Grid.Row="2"
+                                                   Text="{Binding Subtitle}"
+                                                   Style="{StaticResource MutedText}" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Grid Margin="0,6,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.4*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Business Summary" Style="{StaticResource SectionTitleText}" />
+                                <ItemsControl ItemsSource="{Binding FoundationModules}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="{StaticResource SmartoBorderBrush}"
+                                                    BorderThickness="0,0,0,1"
+                                                    Padding="0,12">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                                        <TextBlock Text="{Binding Description}"
+                                                                   Style="{StaticResource MutedText}"
+                                                                   Margin="0,4,0,0" />
+                                                    </StackPanel>
+                                                    <Border Grid.Column="1"
+                                                            Background="{StaticResource SmartoOrangeLightBrush}"
+                                                            CornerRadius="14"
+                                                            Padding="12,6"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Status}"
+                                                                   Foreground="{StaticResource SmartoOrangeDarkBrush}"
+                                                                   FontWeight="SemiBold" />
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Grid.Column="1">
+                            <Border Style="{StaticResource Card}">
+                                <StackPanel>
+                                    <TextBlock Text="Quick Actions" Style="{StaticResource SectionTitleText}" />
+                                    <ItemsControl ItemsSource="{Binding QuickActions}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Style="{StaticResource SecondaryButton}"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        Margin="0,0,0,10">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="36" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="{Binding IconGlyph}"
+                                                                   Style="{StaticResource IconText}"
+                                                                   Foreground="{StaticResource SmartoOrangeBrush}" />
+                                                        <StackPanel Grid.Column="1">
+                                                            <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                                            <TextBlock Text="{Binding Description}"
+                                                                       Style="{StaticResource MutedText}"
+                                                                       FontSize="12" />
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Style="{StaticResource Card}">
+                                <StackPanel>
+                                    <TextBlock Text="Upcoming Tasks" Style="{StaticResource SectionTitleText}" />
+                                    <ItemsControl ItemsSource="{Binding UpcomingTasks}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,12">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                                        <TextBlock Text="{Binding DueLabel}" Style="{StaticResource MutedText}" />
+                                                    </StackPanel>
+                                                    <Border Grid.Column="1"
+                                                            Style="{StaticResource StatusBadge}"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Status}"
+                                                                   Foreground="{StaticResource SmartoOrangeDarkBrush}"
+                                                                   FontSize="12"
+                                                                   FontWeight="SemiBold" />
+                                                    </Border>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Recent Activity" Style="{StaticResource SectionTitleText}" />
+                                <ItemsControl ItemsSource="{Binding RecentActivities}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,14">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="36" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Ellipse Width="10"
+                                                         Height="10"
+                                                         Fill="{StaticResource SmartoOrangeBrush}"
+                                                         VerticalAlignment="Top"
+                                                         Margin="0,8,0,0" />
+                                                <StackPanel Grid.Column="1">
+                                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                                    <TextBlock Text="{Binding Description}" Style="{StaticResource MutedText}" />
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding TimeLabel}"
+                                                           Style="{StaticResource MutedText}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="1" Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="Placeholder Charts" Style="{StaticResource SectionTitleText}" />
+                                <ItemsControl ItemsSource="{Binding ChartPlaceholders}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{StaticResource SmartoSoftSurfaceBrush}"
+                                                    BorderBrush="{StaticResource SmartoBorderBrush}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="16"
+                                                    Padding="16"
+                                                    Margin="0,0,0,12">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="70" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                                    <Grid Grid.Row="1" Margin="0,12">
+                                                        <Rectangle Height="10"
+                                                                   RadiusX="5"
+                                                                   RadiusY="5"
+                                                                   Fill="{StaticResource SmartoOrangeLightBrush}"
+                                                                   VerticalAlignment="Bottom" />
+                                                        <Rectangle Width="120"
+                                                                   Height="10"
+                                                                   RadiusX="5"
+                                                                   RadiusY="5"
+                                                                   Fill="{StaticResource SmartoOrangeBrush}"
+                                                                   HorizontalAlignment="Left"
+                                                                   VerticalAlignment="Bottom" />
+                                                    </Grid>
+                                                    <StackPanel Grid.Row="2">
+                                                        <TextBlock Text="{Binding ValueLabel}"
+                                                                   Foreground="{StaticResource SmartoOrangeDarkBrush}"
+                                                                   FontWeight="SemiBold" />
+                                                        <TextBlock Text="{Binding Description}" Style="{StaticResource MutedText}" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>
+
