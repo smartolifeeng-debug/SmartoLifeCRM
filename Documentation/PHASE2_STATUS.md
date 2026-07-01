@@ -2,16 +2,16 @@
 
 ## Current Milestone
 
-Phase 2A: Professional UI Modernization.
+Version 0.3.0: Professional CRM Shell.
 
-Status: Implemented, pending local validation and commit.
+Status: Implemented, pending local build validation and approval.
 
 ## Locked Milestones
 
 - Phase 1: completed, approved, and locked.
 - Phase 2.1: Products and Quotations Foundation accepted as a backend milestone only.
 
-Feature development is suspended until Phase 2A is reviewed and approved.
+Feature development is suspended until v0.3.0 is reviewed and approved.
 
 ## Phase 2.1 Scope Accepted
 
@@ -42,6 +42,18 @@ Feature development is suspended until Phase 2A is reviewed and approved.
 - Executive dashboard layout with KPI cards, recent activity, upcoming tasks, quick actions, business summary, and placeholder charts.
 - Touchscreen-friendly spacing and high-DPI-ready layout.
 - Active navigation state and subtle hover/press effects.
+
+## v0.3.0 Architecture Scope Implemented
+
+- Dependency injection registration for shell services.
+- MVVM navigation service.
+- Theme service.
+- Configuration service.
+- File logging service.
+- Central error handling service.
+- SQLite startup initialization preserved.
+- Approved navigation pages only: Dashboard, Contacts, Products, Quotations, Calendar, Reports placeholder, and Settings.
+- Settings placeholders for Theme, Company Profile, Database, Backup, and Application Information.
 
 ## Phase 2A Review Status
 
@@ -75,6 +87,8 @@ Cleanup completed:
 - Current dashboard charts are visual placeholders only.
 - Quick action buttons are UI placeholders only and do not execute workflows.
 - The notifications icon is a UI placeholder only; no notifications business module was added.
+- Calendar and Reports are placeholder shell pages only.
+- Backup appears only as a Settings placeholder and is not implemented.
 - Sidebar collapse animation is intentionally subtle and limited to width transition.
 - Full keyboard tab-order verification requires local runtime testing.
 - Binding warning verification requires local Debug output review while the app runs.
@@ -104,7 +118,7 @@ Cleanup completed:
 - Backup implementation.
 - Import/export.
 - Notifications business module.
-- Calendar.
+- Calendar implementation.
 - Cloud sync.
 - AI.
 - Inventory.
@@ -121,17 +135,17 @@ dotnet build SmartoLifeCRM.sln
 dotnet run --project Source\SmartoLifeCRM.App\SmartoLifeCRM.App.csproj
 ```
 
-If validation succeeds, commit Phase 2A:
+If validation succeeds, commit v0.3.0:
 
 ```powershell
 git status --short
 git add .
-git commit -m "Modernize Phase 2A CRM user interface"
+git commit -m "Build v0.3.0 professional CRM shell"
 ```
 
 ## Next Milestone
 
 No next feature milestone is approved.
 
-Do not begin GPS, Maps, WhatsApp, QR/OCR, Reports, Backup, Import/Export, Notifications, Cloud Sync, or any later milestone until Phase 2A is reviewed and approved.
+Do not begin Contacts module implementation, GPS, Maps, WhatsApp, QR/OCR, Reports, Backup, Import/Export, Notifications, Cloud Sync, or any later milestone until v0.3.0 is reviewed and approved.
 

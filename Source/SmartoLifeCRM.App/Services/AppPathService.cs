@@ -9,5 +9,9 @@ public sealed class AppPathService : IAppPathService
         "SmartoLifeCRM");
 
     public string DatabasePath => Path.Combine(AppDataDirectory, "SmartoLifeCRM.db");
+
+    public string LogsDirectory => Path.Combine(AppDataDirectory, "Logs");
+
+    public string SettingsDirectory => Path.Combine(AppDataDirectory, "Settings");
 }
 

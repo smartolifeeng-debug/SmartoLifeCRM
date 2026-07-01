@@ -1,8 +1,8 @@
 namespace SmartoLifeCRM.App.ViewModels;
 
-public sealed class ModuleSummaryViewModel
+public sealed class ModuleSectionViewModel
 {
-    public ModuleSummaryViewModel(string title, string description, string status)
+    public ModuleSectionViewModel(string title, string description, string status)
     {
         Title = title;
         Description = description;

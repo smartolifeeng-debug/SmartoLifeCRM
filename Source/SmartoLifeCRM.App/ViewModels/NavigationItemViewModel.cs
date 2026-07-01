@@ -4,13 +4,15 @@ public sealed class NavigationItemViewModel : ObservableObject
 {
     private bool _isActive;
 
-    public NavigationItemViewModel(string title, string description, string iconGlyph, bool isEnabled)
+    public NavigationItemViewModel(string moduleKey, string title, string description, string iconGlyph)
     {
+        ModuleKey = moduleKey;
         Title = title;
         Description = description;
         IconGlyph = iconGlyph;
-        IsEnabled = isEnabled;
     }
+
+    public string ModuleKey { get; }
 
     public string Title { get; }
 
@@ -18,7 +20,7 @@ public sealed class NavigationItemViewModel : ObservableObject
 
     public string IconGlyph { get; }
 
-    public bool IsEnabled { get; }
+    public bool IsEnabled => true;
 
     public bool IsActive
     {

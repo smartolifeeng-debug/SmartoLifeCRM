@@ -25,6 +25,10 @@ public partial class App : Application
             .ConfigureServices((context, services) =>
             {
                 services.AddSingleton<IAppPathService, AppPathService>();
+                services.AddSingleton<IConfigurationService, ConfigurationService>();
+                services.AddSingleton<IThemeService, ThemeService>();
+                services.AddSingleton<ILoggingService, FileLoggingService>();
+                services.AddSingleton<IErrorHandler, ErrorHandler>();
                 services.AddDbContext<SmartoLifeDbContext>((provider, options) =>
                 {
                     var pathService = provider.GetRequiredService<IAppPathService>();
@@ -37,6 +41,9 @@ public partial class App : Application
                 });
 
                 services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
+                services.AddSingleton<DashboardViewModel>();
+                services.AddSingleton<SettingsPageViewModel>();
+                services.AddSingleton<INavigationService, NavigationService>();
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindow>();
             })
@@ -47,16 +54,31 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        Directory.CreateDirectory(_host.Services.GetRequiredService<IAppPathService>().AppDataDirectory);
-
-        using (var scope = _host.Services.CreateScope())
+        try
         {
-            var databaseInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
-            await databaseInitializer.InitializeAsync();
-        }
+            var pathService = _host.Services.GetRequiredService<IAppPathService>();
+            Directory.CreateDirectory(pathService.AppDataDirectory);
+            Directory.CreateDirectory(pathService.LogsDirectory);
+            Directory.CreateDirectory(pathService.SettingsDirectory);
 
-        var mainWindow = _host.Services.GetRequiredService<MainWindow>();
-        mainWindow.Show();
+            _host.Services.GetRequiredService<ILoggingService>().Info("Starting Smarto Life CRM v0.3.0 shell.");
+
+            using (var scope = _host.Services.CreateScope())
+            {
+                var databaseInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
+                await databaseInitializer.InitializeAsync();
+            }
+
+            var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+            mainWindow.Show();
+        }
+        catch (Exception exception)
+        {
+            _host.Services.GetRequiredService<IErrorHandler>().Handle(
+                exception,
+                "Smarto Life CRM could not start. Please check the local log file for details.");
+            Shutdown(1);
+        }
     }
 
     protected override async void OnExit(ExitEventArgs e)
